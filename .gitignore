@@ -1,0 +1,11 @@
+## Xcode
+*.xcworkspace
+Pods/
+
+## User settings
+xcuserdata/
+
+## App packaging
+*.ipa
+*.dSYM.zip
+*.dSYM
