@@ -68,16 +68,14 @@ NSURLSessionDelegate
 
 - (void)setup {
     self.presenter = [[MainPresenter alloc] initViewController:self];
-    self.collectionView.bounces = true;
-    self.collectionView.alwaysBounceHorizontal = true;
-    self.collectionView.alwaysBounceVertical = false;
     self.collectionView.dataSource = self;
-    CGFloat inset = self.collectionView.frame.size.width - self.collectionView.frame.size.height;
+    CGFloat inset = (self.collectionView.frame.size.width - self.collectionView.frame.size.height) / 2;
     self.collectionView.contentInset = UIEdgeInsetsMake(0, inset, 0, inset);
     
+    CGFloat itemSide = self.collectionView.frame.size.height - 15;
     PagingCollectionViewLayout *layout = (PagingCollectionViewLayout *)self.collectionView.collectionViewLayout;
     layout.minimumLineSpacing = 15;
-    layout.itemSize = CGSizeMake(self.collectionView.frame.size.height, self.collectionView.frame.size.height);
+    layout.itemSize = CGSizeMake(itemSide, itemSide);
     
     [self.linkTextField addDoneOnKeyboardWithTarget:self
                                              action:@selector(tryDownloadMedia)

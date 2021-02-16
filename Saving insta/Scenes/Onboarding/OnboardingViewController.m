@@ -46,9 +46,6 @@ PagingCollectionFlowDelegate
 
 - (void)setup {
     self.modalPresentationStyle = UIModalPresentationOverFullScreen;
-    self.collectionView.bounces = true;
-    self.collectionView.alwaysBounceHorizontal = true;
-    self.collectionView.alwaysBounceVertical = false;
     self.collectionView.dataSource = self;
     
     PagingCollectionViewLayout *layout = (PagingCollectionViewLayout *)self.collectionView.collectionViewLayout;

@@ -12,6 +12,7 @@
 #import "ImageProcessor.h"
 #import "DownloadMediaProgress.h"
 #import "UIViewController+Utils.h"
+#import "AppReviewManager.h"
 
 @interface MainPresenter ()
 <
@@ -84,7 +85,13 @@ MediaSaverDelegate
 }
 
 - (BOOL)canDownloadPasteboardTextFieldText:(NSString *)text {
-    if (!UIPasteboard.generalPasteboard.string) {
+    BOOL isAutodownload = [NSUserDefaults.standardUserDefaults boolForKey:@"is_autodownload"];
+    
+    if (!isAutodownload) {
+        return NO;
+    }
+    
+    if (UIPasteboard.generalPasteboard.string == nil) {
         return NO;
     }
     
@@ -95,8 +102,7 @@ MediaSaverDelegate
         NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"(?i)https?://(?:www\\.)?\\S+(?:/|\\b)"
                                                                      options:0 error:&error];
         BOOL isValidLink = ([[regex matchesInString:pasteboard options:0 range:NSMakeRange(0, [pasteboard length])] count] > 0);
-        BOOL isAutodownload = [NSUserDefaults.standardUserDefaults boolForKey:@"is_autodownload"];
-        return isValidLink && isAutodownload && ![text isEqualToString:pasteboard];
+        return isValidLink && ![text isEqualToString:pasteboard];
     }
     
     return NO;
@@ -152,6 +158,8 @@ MediaSaverDelegate
 - (void)mediaSaverCompleteDownloading {
     [self.viewController hideProgressHud];
     [self.viewController showSuccessHUD:@"Cохранено"];
+    [AppReviewManager.shared didDownloadMedia];
+    [AppReviewManager.shared requestReviewAlertIfNeeded];
 }
 
 - (void)mediaSaverDidReceiveError:(NSError *)error {
